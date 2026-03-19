@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold border-b pb-4">Loan Statement</h2>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
+        <div>
+            <p class="text-gray-500 text-xs uppercase">Principal</p>
+            <p class="font-bold">{{ loan.amount_requested|floatformat:0 }} UGX</p>
+        </div>
+        <div>
+            <p class="text-gray-500 text-xs uppercase">Interest ({{ loan.interest_rate }}%)</p>
+            <p class="font-bold text-blue-600">+ {{ interest_amount|floatformat:0 }} UGX</p>
+        </div>
+        <div>
+            <p class="text-gray-500 text-xs uppercase">Penalty</p>
+            <p class="font-bold text-red-600">+ {{ loan.penalty_amount|floatformat:0 }} UGX</p>
+        </div>
+        <div>
+            <p class="text-gray-500 text-xs uppercase">Total Paid</p>
+            <p class="font-bold text-green-600">- {{ loan.total_repaid|floatformat:0 }} UGX</p>
+        </div>
+    </div>
+
+    <div class="bg-gray-50 p-4 rounded-lg border-2 border-dashed mb-6">
+        <p class="text-center text-gray-600">Current Balance Owed</p>
+        <p class="text-center text-3xl font-black text-gray-900">{{ loan.remaining_balance|floatformat:0 }} UGX</p>
+    </div>
+
+    <h3 class="font-bold mb-3">Repayment History</h3>
+    <table class="w-full text-left text-sm">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="p-2">Date</th>
+                <th class="p-2">Amount</th>
+                <th class="p-2">Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for repayment in repayments %}
+            <tr class="border-b">
+                <td class="p-2">{{ repayment.date_paid|date:"d M Y" }}</td>
+                <td class="p-2 font-bold">{{ repayment.amount|floatformat:0 }} UGX</td>
+                <td class="p-2 text-gray-500">{{ repayment.notes|default:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="p-4 text-center text-gray-400">No verified repayments yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

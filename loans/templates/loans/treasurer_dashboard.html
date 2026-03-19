@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="mobile-menu" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden transition-opacity duration-300">
+    <div class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl p-6 transform -translate-x-full transition-transform duration-300 ease-in-out" id="menu-content">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <div>
+                <span class="text-xl font-black text-blue-600 tracking-tighter">TREASURER</span>
+                <p class="text-[10px] text-gray-400 uppercase tracking-widest">Command Center</p>
+            </div>
+            <button onclick="toggleMenu()" class="text-gray-400 hover:text-red-500 transition">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <nav class="space-y-3">
+            <p class="text-[10px] font-bold text-gray-400 uppercase ml-2">Core Actions</p>
+            <a href="{% url 'treasurer_dashboard' %}" class="flex items-center px-4 py-3 text-sm font-bold text-blue-700 bg-blue-50 rounded-xl">
+                Loan Management
+            </a>
+            <a href="/admin/ledger/transaction/" class="flex items-center px-4 py-3 text-sm font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition">
+                Verify Deposits
+            </a>
+            <a href="/admin/loans/repayment/" class="flex items-center px-4 py-3 text-sm font-bold text-gray-600 hover:bg-gray-50 rounded-xl transition">
+                Verify Repayments
+            </a>
+            <hr class="my-6 border-gray-100">
+            <a href="{% url 'dashboard' %}" class="flex items-center px-4 py-3 text-sm font-bold text-gray-500 hover:text-blue-600 transition">
+                Personal Dashboard
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto p-4 md:p-6">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-black text-gray-800 tracking-tight">Treasurer Command</h1>
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">Institutional Liquidity & Oversight</p>
+        </div>
+        
+        <button onclick="toggleMenu()" class="md:hidden bg-white border border-gray-200 p-2 rounded-xl shadow-sm">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+    </div>
+
+    <div class="hidden md:flex gap-2 mb-8 bg-gray-100/50 p-1.5 rounded-2xl w-fit">
+        <a href="{% url 'treasurer_dashboard' %}" class="px-6 py-2 bg-white rounded-xl text-[10px] font-black uppercase tracking-wider shadow-sm text-blue-600 border border-gray-100">
+            Loan Management
+        </a>
+        <a href="/admin/ledger/transaction/" class="px-6 py-2 rounded-xl text-[10px] font-black text-gray-500 hover:bg-white hover:shadow-sm transition uppercase">
+            Verify Deposits
+        </a>
+        <a href="/admin/loans/repayment/" class="px-6 py-2 rounded-xl text-[10px] font-black text-gray-500 hover:bg-white hover:shadow-sm transition uppercase">
+            Verify Repayments
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-purple-500">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Savings</p>
+                    <h3 class="text-xl font-black text-gray-900 mt-1">{{ total_savings|floatformat:0 }} <span class="text-[10px] text-gray-400">UGX</span></h3>
+                </div>
+                <div class="bg-purple-50 p-2 rounded-lg">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+            </div>
+            <p class="text-[9px] text-gray-400 mt-3 font-bold uppercase">Institutional Equity</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-blue-600">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Cash Available</p>
+                    <h3 class="text-xl font-black text-blue-600 mt-1">{{ cash_at_hand|floatformat:0 }} <span class="text-[10px] text-gray-400">UGX</span></h3>
+                </div>
+                <div class="bg-blue-50 p-2 rounded-lg">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+            </div>
+            <p class="text-[9px] text-blue-600 mt-3 font-black flex items-center bg-blue-50 w-fit px-2 py-0.5 rounded-full uppercase">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5 animate-pulse"></span> Liquidity Active
+            </p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-orange-500">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Principal Out</p>
+                    <h3 class="text-xl font-black text-orange-600 mt-1">{{ total_principal|floatformat:0 }} <span class="text-[10px] text-gray-400">UGX</span></h3>
+                </div>
+                <div class="bg-orange-50 p-2 rounded-lg">
+                    <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                </div>
+            </div>
+            <p class="text-[9px] text-gray-400 mt-3 font-bold uppercase tracking-tighter">Current Risk Portfolio</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-green-500">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Projected Revenue</p>
+                    <h3 class="text-xl font-black text-green-600 mt-1">{{ total_interest|floatformat:0 }} <span class="text-[10px] text-gray-400">UGX</span></h3>
+                </div>
+                <div class="bg-green-50 p-2 rounded-lg">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                </div>
+            </div>
+            <p class="text-[9px] text-gray-400 mt-3 font-bold uppercase tracking-tighter">Interest & Penalties</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
+                <h3 class="text-[11px] font-black text-gray-600 uppercase tracking-wider">Pending Review</h3>
+                <span class="bg-orange-100 text-orange-700 text-[9px] font-black px-2 py-0.5 rounded-full">{{ pending_loans.count }}</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <tbody class="divide-y divide-gray-50">
+                        {% for loan in pending_loans %}
+                        <tr class="hover:bg-gray-50/50 transition">
+                            <td class="p-4">
+                                <p class="text-xs font-black text-gray-800">{{ loan.user.full_name|default:loan.user.phone_number }}</p>
+                                <p class="text-[9px] text-gray-400 font-bold uppercase">{{ loan.amount_requested|floatformat:0 }} UGX • {{ loan.duration_months }} Months</p>
+                            </td>
+                            <td class="p-4 text-right">
+                                <form method="POST" action="{% url 'approve_loan' loan.id %}" class="flex justify-end gap-1">
+                                    {% csrf_token %}
+                                    <button name="action" value="approve" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase hover:bg-blue-700 transition">Approve</button>
+                                    <button name="action" value="reject" class="bg-gray-100 text-gray-500 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase hover:bg-red-50 hover:text-red-600 transition">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td class="p-8 text-center text-gray-300 text-[10px] font-bold uppercase">No pending reviews</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-gray-50 bg-blue-50/30 flex justify-between items-center">
+                <h3 class="text-[11px] font-black text-blue-600 uppercase tracking-wider">Awaiting Disbursement</h3>
+                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <tbody class="divide-y divide-gray-50">
+                        {% for loan in active_loans_all %} 
+                            {% if loan.status == 'APPROVED' %}
+                            <tr class="hover:bg-gray-50/50 transition">
+                                <td class="p-4">
+                                    <p class="text-xs font-black text-gray-800">{{ loan.user.full_name|default:loan.user.phone_number }}</p>
+                                    <p class="text-[9px] text-blue-600 font-black uppercase tracking-tighter">{{ loan.amount_requested|floatformat:0 }} UGX</p>
+                                </td>
+                                <td class="p-4 text-right">
+                                    <form method="POST" action="{% url 'disburse_loan' loan.id %}">
+                                        {% csrf_token %}
+                                        <button class="bg-green-600 text-white px-4 py-1.5 rounded-lg text-[9px] font-black uppercase hover:bg-green-700 shadow-sm transition">
+                                            Mark Sent
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-10">
+        <div class="p-4 border-b border-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50/20">
+            <h3 class="text-[11px] font-black text-gray-500 uppercase tracking-[0.1em]">Member Registry</h3>
+            <div class="relative w-full sm:w-64">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-3 w-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </span>
+                <input type="text" id="memberSearch" placeholder="Filter members..." class="pl-9 w-full text-[10px] font-bold border-gray-200 rounded-xl focus:ring-blue-500 bg-white uppercase tracking-wider">
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left" id="memberTable">
+                <thead>
+                    <tr class="bg-gray-50/50 text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                        <th class="px-6 py-3">Member Name</th>
+                        <th class="px-6 py-3">Contact</th>
+                        <th class="px-6 py-3 text-right">Operations</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50 text-xs">
+                    {% for member in members %}
+                    <tr class="hover:bg-gray-50/50 transition member-row">
+                        <td class="px-6 py-4 font-black text-gray-800">{{ member.full_name|default:"Unnamed" }}</td>
+                        <td class="px-6 py-4 text-gray-500 font-medium">{{ member.phone_number }}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-blue-600 hover:text-blue-800 text-[9px] font-black uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full transition">Profile</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-gray-100 flex items-center bg-gray-800">
+            <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <h2 class="text-[10px] font-black text-white uppercase tracking-[0.2em]">Financial Intelligence Hub</h2>
+        </div>
+        <div class="p-6">
+            <form method="GET" action="{% url 'export_report' %}" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+                <div>
+                    <label class="block text-[9px] uppercase font-black text-gray-400 mb-2 tracking-widest">Start Period</label>
+                    <input type="date" name="start_date" required class="w-full border-gray-200 rounded-xl text-[10px] font-black p-2.5 bg-gray-50 uppercase shadow-inner">
+                </div>
+                <div>
+                    <label class="block text-[9px] uppercase font-black text-gray-400 mb-2 tracking-widest">End Period</label>
+                    <input type="date" name="end_date" required class="w-full border-gray-200 rounded-xl text-[10px] font-black p-2.5 bg-gray-50 uppercase shadow-inner">
+                </div>
+                <div>
+                    <label class="block text-[9px] uppercase font-black text-gray-400 mb-2 tracking-widest">Output Format</label>
+                    <select name="format" class="w-full border-gray-200 rounded-xl text-[10px] font-black p-2.5 bg-gray-50 uppercase shadow-inner">
+                        <option value="excel">Excel (.csv)</option>
+                        <option value="pdf">PDF (.pdf)</option>
+                    </select>
+                </div>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-100 transition h-[42px]">
+                    Generate Audit Report
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const content = document.getElementById('menu-content');
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            setTimeout(() => content.classList.remove('-translate-x-full'), 10);
+        } else {
+            content.classList.add('-translate-x-full');
+            setTimeout(() => menu.classList.add('hidden'), 300);
+        }
+    }
+
+    // Member Filter
+    document.getElementById('memberSearch').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.member-row');
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

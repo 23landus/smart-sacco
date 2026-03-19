@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative min-h-screen w-full flex items-center justify-center py-12 px-4 bg-fixed bg-slate-900" 
+     style="background-image: url('https://i.pinimg.com/1200x/e5/16/eb/e516ebdd16ace98f46031f5a097d2c67.jpg'); background-size: cover; background-position: center;">
+    
+    <div class="absolute inset-0 bg-gradient-to-tr from-slate-950/90 via-slate-900/40 to-slate-950/80 backdrop-blur-[2px]"></div>
+
+    <div class="relative z-10 w-full max-w-xl">
+        
+        <div class="mb-10 text-center">
+            <h1 class="text-4xl font-black text-white tracking-tighter uppercase italic drop-shadow-2xl">
+                Loan Request
+            </h1>
+            <p class="text-[10px] text-blue-400 font-black uppercase tracking-[0.4em] mt-2">
+                Secure Institutional Credit
+            </p>
+        </div>
+
+        <div class="bg-blue-600/20 backdrop-blur-xl rounded-[2rem] p-8 shadow-2xl mb-8 border border-white/10 text-center">
+            <p class="text-[9px] font-bold text-blue-300 uppercase tracking-widest opacity-70 mb-1">Maximum Borrowing Power</p>
+            <h3 class="text-5xl font-extralight text-white tracking-tight">
+                {{ limit|floatformat:0 }} <span class="text-lg opacity-40 font-light">UGX</span>
+            </h3>
+            <div class="mt-4 flex justify-center">
+                <span class="bg-green-500/20 text-green-400 text-[9px] font-black px-3 py-1 rounded-full border border-green-500/30 uppercase tracking-tighter">
+                    Verified Metric: 3x Savings
+                </span>
+            </div>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl p-8 md:p-12 border border-white">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="bg-red-50 text-red-700 p-4 rounded-2xl mb-6 text-[10px] font-black uppercase tracking-tight border border-red-100">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" class="space-y-8">
+                {% csrf_token %}
+                
+                <div class="space-y-3">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Amount Requested</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                            <span class="font-bold text-sm text-blue-600/50">UGX</span>
+                        </div>
+                        <input type="number" name="amount_requested" 
+                            class="w-full pl-20 pr-6 py-5 bg-slate-100/50 border-2 border-transparent rounded-2xl focus:border-blue-600 focus:bg-white focus:ring-0 font-black text-slate-900 transition-all outline-none text-lg"
+                            placeholder="e.g. 50,000" required>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Repayment Timeline</label>
+                    <div class="relative">
+                        <select name="duration_months" 
+                            class="w-full px-6 py-5 bg-slate-100/50 border-2 border-transparent rounded-2xl focus:border-blue-600 focus:bg-white focus:ring-0 font-black text-slate-900 transition-all outline-none appearance-none cursor-pointer">
+                            <option value="1">1 Month Plan</option>
+                            <option value="3">3 Months Plan</option>
+                            <option value="6">6 Months Plan</option>
+                            <option value="12">12 Months Plan</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl shadow-xl shadow-blue-200 transition-all transform hover:-translate-y-1 active:scale-95 uppercase tracking-[0.2em] text-xs">
+                        Authorize Application
+                    </button>
+                    <a href="{% url 'dashboard' %}" class="block text-center mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-red-500 transition-colors">
+                        Discard & Return
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

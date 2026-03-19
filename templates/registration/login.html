@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="relative min-h-screen w-full flex items-center justify-center py-12 px-4 bg-fixed bg-slate-900" 
+     style="background-image: url('https://i.pinimg.com/1200x/e5/16/eb/e516ebdd16ace98f46031f5a097d2c67.jpg'); background-size: cover; background-position: center;">
+    
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+
+    <div class="relative z-10 w-full max-w-md">
+        <div class="mb-8 text-center">
+            <h1 class="text-4xl font-black text-white tracking-tighter uppercase italic drop-shadow-2xl">
+                Smart <span class="text-blue-500">SACCO</span>
+            </h1>
+            <p class="text-[10px] text-gray-400 font-black uppercase tracking-[0.4em] mt-2">Secure Gateway</p>
+        </div>
+
+        <div class="bg-white/95 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl p-10 border border-white">
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-6 p-4 rounded-2xl text-[10px] font-black uppercase tracking-tight border 
+                        {% if message.tags == 'success' %} bg-green-50 text-green-700 border-green-100 
+                        {% else %} bg-red-50 text-red-700 border-red-100 {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="space-y-4">
+                    {% for field in form %}
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">{{ field.label }}</label>
+                        <div class="w-full px-6 py-4 bg-slate-100/50 rounded-2xl border-2 border-transparent focus-within:border-blue-600 transition-all">
+                            {{ field }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 uppercase tracking-widest text-xs">
+                        Sign In
+                    </button>
+                    
+                    <div class="flex flex-col gap-4 mt-8 text-center">
+                        <a href="{% url 'password_reset' %}" class="text-[9px] font-black text-slate-400 uppercase tracking-widest hover:text-blue-600 transition-colors">
+                            Forgot Password?
+                        </a>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                            New here? <a href="{% url 'register' %}" class="text-blue-600 hover:underline">Register Account</a>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    input {
+        width: 100% !important;
+        background: transparent !important;
+        border: none !important;
+        font-weight: 800 !important;
+        color: #1e293b !important;
+        outline: none !important;
+    }
+</style>
+{% endblock %}

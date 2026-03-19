@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: smart-sacco
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: "gunicorn sacco_smart.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0 # Match your local python version
